@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/instagram/Instagram.js"></script>
+
+  <script type="text/javascript">
+
+    var clientID = "YOUR CLIENT ID";
+    var redirectURI = "YOUR REDIRECT URI";
+
+    var instagram;
+
+    window.onload = function () {
+
+      instagram = new Instagram(clientID, redirectURI);
+
+      var authBtn = document.getElementById("authBtn");
+      authBtn.addEventListener("click", function () {
+        instagram.login();
+      });
+
+    };
+
+  </script>
+</head>
+<body>
+
+<button id="authBtn">log in to Instagram</button>
+
+</body>
+</html>
