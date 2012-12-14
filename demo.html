@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/InstagramJS/InstagramJS.js"></script>
+
+  <script type="text/javascript">
+
+    var clientID = "YOUR CLIENT ID";
+    var redirectURI = "YOUR REDIRECT URI";
+
+    var instagram;
+
+    window.onload = function () {
+      instagram = new Instagram(clientID, redirectURI);
+    };
+
+  </script>
+</head>
+<body>
+
+<button onclick="instagram.login();">
+  log in to Instagram
+</button>
+
+</body>
+</html>

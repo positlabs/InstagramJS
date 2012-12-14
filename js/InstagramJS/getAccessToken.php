@@ -5,15 +5,15 @@
     Retrieves Instagram access token.
     Requires code via query parameter (supplied by instagram)
 
-    ini_set('display_errors', 'On');
   */
 
+  ini_set('display_errors', 'On');
 
   $url = "https://api.instagram.com/oauth/access_token";
 
   $access_token_parameters = array(
     'client_id'		=>          $_GET["clientID"],
-    'client_secret'		=>      '',
+    'client_secret'		=>      '405b71c3fda94e57b31c3975aa5d1b38',
     'grant_type'		=>        'authorization_code',
     'redirect_uri'		=>      $_GET["redirectURI"],
     'code'			=>            $_GET["code"]

@@ -15,6 +15,7 @@ var Instagram = function (clientID, redirectURI) {
 	var jsonResponse;
 	var loc = window.location.href;
 	var authURL = 'https://api.instagram.com/oauth/authorize/?client_id=' + clientID + '&redirect_uri=' + redirectURI + '&response_type=code';
+	var getAccessTokenURL = "./js/InstagramJS/getAccessToken.php";
 
 	var authCode = loc.split("code=")[1];
 
@@ -53,7 +54,7 @@ var Instagram = function (clientID, redirectURI) {
 	function getAccessToken(authCode, callback) {
 		console.log(arguments.callee.name + "()", arguments);
 
-		var accessTokenRequestURL = "./getAccessToken.php?code=" + authCode + "&clientID=" + clientID + "&redirectURI=" + redirectURI;
+		var _accessTokenRequestURL = getAccessTokenURL + "?code=" + authCode + "&clientID=" + clientID + "&redirectURI=" + redirectURI;
 
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function (event) {
@@ -70,7 +71,7 @@ var Instagram = function (clientID, redirectURI) {
 
 		};
 
-		xmlhttp.open("GET", accessTokenRequestURL, true);
+		xmlhttp.open("GET", _accessTokenRequestURL, true);
 		xmlhttp.send();
 	}
 
@@ -109,8 +110,6 @@ var Instagram = function (clientID, redirectURI) {
 			liked:liked
 		};
 	})();
-
-//	http://instagram.com/developer/endpoints/
 
 	var relationship = (function () {
 		var FOLLOW_ACTION = "follow";
@@ -187,8 +186,7 @@ var Instagram = function (clientID, redirectURI) {
 			//TODO - post comment with curl ...add callback to url?
 //			curl -F 'access_token=261370252.f59def8.503d60cf8b114ee08898f1ca42c5f546' \
 //    -F 'text=This+is+my+comment' \
-//    https://api.instagram.com/v1/media/{media-id}/comments
-			Instagram.utils.buildURL("media/" + mediaID + "/comments")
+			Instagram.utils.buildURL("media/" + mediaID + "/comments") + "&text=" + comment;
 		}
 
 		function removeComment(mediaID, commentID, callback) {
@@ -235,7 +233,10 @@ var Instagram = function (clientID, redirectURI) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("tags/" + tag), callback);
 		}
 
-		/* @param params is an Instagram.parameters object */
+		/*
+		 *		@param params is an Instagram.parameters object
+		 * 	Takes min_id and max_id
+		 */
 		function recent(tag, params, callback) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("tags/" + tag + "/media/recent") + params.toString(), callback);
 		}
@@ -258,11 +259,18 @@ var Instagram = function (clientID, redirectURI) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("location/" + locationID), callback);
 		}
 
+		/*
+		 *		@param params is an Instagram.parameters object
+		 * 		takes min_id, max_id, min_timestamp, max_timestamp
+		 */
 		function recent(locationID, params, callback) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("location/" + locationID + "/media/recent") + params.toString(), callback);
 		}
 
-		/* @param parameters is an Instagram.parameters object */
+		/*
+		 *		@param params is an Instagram.parameters object
+		 * 	takes lat, lng, distance, foursquare_v2_id, foursquare_id
+		 */
 		function search(params, callback) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("location/search") + params.toString(), callback);
 		}
@@ -277,7 +285,7 @@ var Instagram = function (clientID, redirectURI) {
 
 	var geography = (function () {
 
-		function recent(geoID, callback){
+		function recent(geoID, callback) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("geographies/" + geoID + "/media/recent"), callback);
 		}
 
@@ -337,42 +345,41 @@ Instagram.utils.buildURL = function (endpoint) {
  *		classes
  */
 
-Instagram.parameters = function () {
+Instagram.Parameters = function () {
 
-	/* @return a string of query parameters */
-	function toString() {
+	this.count = undefined;
+	this.text = undefined;
+	this.lat = undefined;
+	this.lng = undefined;
+	this.min_timestamp = undefined;
+	this.max_timestamp = undefined;
+	this.distance = undefined;
+	this.min_id = undefined;
+	this.max_id = undefined;
+	this.max_like_id = undefined;
+	this.action = undefined;
+	this.foursquare_id = undefined;
+	this.foursquare_v2_id = undefined;
 
-		//TODO - test
-		return JSON.stringify(this, stringReplace);
-
-	}
-
-	function stringReplace(key, value) {
-
+	this.toString = function () {
 		var string = "";
-		if (typeof value !== 'function' && value !== undefined)
-			string += "&" + key + "=" + value;
+		var params = this;
+
+		for (var param in params) {
+
+			if (params[param] !== undefined && typeof params[param] != "function")
+				string += "&" + param + "=" + params[param];
+		}
+
 		return string;
 
-	}
+	};
 
-	return{
-		"toString":toString,
-		"count":undefined,
-		"text":undefined,
-		"lat":undefined,
-		"lng":undefined,
-		"min_timestamp":undefined,
-		"max_timestamp":undefined,
-		"distance":undefined,
-		"min_id":undefined,
-		"max_id":undefined,
-		"max_like_id":undefined,
-		"action":undefined,
-		"foursquare_id":undefined,
-		"foursquare_v2_id":undefined
-	}
+
 };
+
+
+/* @return a string of query parameters */
 
 
 /*
