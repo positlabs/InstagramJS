@@ -12,18 +12,13 @@
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
+      if(instagram.error);//handle error
     };
 
 
 
   function test(){
-    var params = new Instagram.Parameters();
-    params.min_id = 3;
-    params.max_id = 5;
-    params.text = "hello world";
 
-    var stringy = params.toString();
-    console.log('stringy', stringy);
 
   }
 

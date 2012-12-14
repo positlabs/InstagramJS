@@ -33,11 +33,8 @@ var Instagram = function (clientID, redirectURI) {
 		if (error_description) error_description = error_description.split("=")[0];
 		var errorobj = {error:error, error_reason:error_reason, error_description:error_description};
 
-		//TODO - test this!
-		if (error) {
-			console.log("error!", errorobj);
+		if (error)
 			return errorobj;
-		}
 
 	}
 
@@ -323,14 +320,18 @@ Instagram.accessToken = {};
 Instagram.baseURL = "https://api.instagram.com/v1/";
 
 Instagram.utils = {};
+
 Instagram.utils.getJSONP = function (url, callback) {
-	console.log("getJSON", url, callback.name);
+	console.log("getJSON", url);
 
 	var script = document.createElement("script");
 	script.type = "text/javascript";
-	if (callback.name != undefined)
-		script.src = url + "&callback=" + callback.name;
-	else script.src = url;
+
+	window.__loaded = function(response) {
+		callback(response);
+	};
+
+	script.src = url + "&callback=__loaded";
 
 	document.body.appendChild(script);
 
@@ -361,12 +362,12 @@ Instagram.Parameters = function () {
 	this.foursquare_id = undefined;
 	this.foursquare_v2_id = undefined;
 
+	/* @return a string of query parameters */
 	this.toString = function () {
 		var string = "";
 		var params = this;
 
 		for (var param in params) {
-
 			if (params[param] !== undefined && typeof params[param] != "function")
 				string += "&" + param + "=" + params[param];
 		}
@@ -375,11 +376,7 @@ Instagram.Parameters = function () {
 
 	};
 
-
 };
-
-
-/* @return a string of query parameters */
 
 
 /*
