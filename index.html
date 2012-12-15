@@ -12,13 +12,16 @@
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
-      if(instagram.error);//handle error
+
     };
 
 
 
   function test(){
 
+    instagram.likes.post("346476053871850482_183663451", function(r){
+      console.log('r', r);
+    })
 
   }
 

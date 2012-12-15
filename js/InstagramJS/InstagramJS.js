@@ -12,7 +12,7 @@
 
 
 var Instagram = function (clientID, redirectURI) {
-	var jsonResponse;
+	var currUser;
 	var loc = window.location.href;
 	var authURL = 'https://api.instagram.com/oauth/authorize/?client_id=' + clientID + '&redirect_uri=' + redirectURI + '&response_type=code';
 	var getAccessTokenURL = "./js/InstagramJS/getAccessToken.php";
@@ -38,11 +38,12 @@ var Instagram = function (clientID, redirectURI) {
 
 	}
 
+	//TODO - add scope parameter object (basic, comments, relationships, likes)
 	function login(callback) {
 		console.log(arguments.callee.name + "()", arguments);
 
 		// request permission
-		window.open(authURL, "_self");
+		window.open(authURL + "&scope=likes", "_self");
 		if (callback) callback(false);
 
 	}
@@ -53,23 +54,15 @@ var Instagram = function (clientID, redirectURI) {
 
 		var _accessTokenRequestURL = getAccessTokenURL + "?code=" + authCode + "&clientID=" + clientID + "&redirectURI=" + redirectURI;
 
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function (event) {
+		Instagram.utils.getJSON(_accessTokenRequestURL, function (response) {
+			console.log('\n\nevent', response);
 
-			if (event.target.readyState == 4) {
+			currUser = response.user;
+			Instagram.accessToken = response.access_token;
 
-				var json = JSON.parse(event.target.response);
-				console.log('json', json);
-				jsonResponse = json;
-				Instagram.accessToken = json.access_token;
+			if (callback) callback(response);
 
-				if (callback) callback(event.target.response);
-			}
-
-		};
-
-		xmlhttp.open("GET", _accessTokenRequestURL, true);
-		xmlhttp.send();
+		});
 	}
 
 	function currentUser() {
@@ -88,7 +81,7 @@ var Instagram = function (clientID, redirectURI) {
 		}
 
 		function recent(id, callback) {
-			Instagram.utils.getJSONP(Instagram.baseURL + "users/media/" + id + "/recent?access_token=" + Instagram.accessToken, callback);
+			Instagram.utils.getJSONP(Instagram.baseURL + "users/" + id + "/media/recent?access_token=" + Instagram.accessToken, callback);
 		}
 
 		function search(name, callback) {
@@ -134,7 +127,8 @@ var Instagram = function (clientID, redirectURI) {
 
 		function postRelationship(id, action, callback) {
 			//TODO - POST this
-			Instagram.utils.buildURL("users/" + id + "/relationship") + "action=" + action;
+			var url = Instagram.utils.buildURL("users/" + id + "/relationship") + "action=" + action;
+
 		}
 
 		return{
@@ -205,22 +199,26 @@ var Instagram = function (clientID, redirectURI) {
 			Instagram.utils.getJSONP(Instagram.utils.buildURL("media/" + mediaID + "/likes"), callback);
 		}
 
-		function postLike(mediaID, callback) {
+		function post(mediaID, callback) {
 			//TODO - post with curl
-			Instagram.utils.buildURL("media/" + mediaID + "/likes");
+			var url = Instagram.utils.buildURL("media/" + mediaID + "/likes");
+//			Instagram.utils.rest(Instagram.POST, url, function (e) {
+			Instagram.utils.getJSONP(url, function(e){
+				console.log('e', e);
+			});
 //			curl -F 'access_token=261370252.f59def8.503d60cf8b114ee08898f1ca42c5f546' \
 		}
 
-		function removeLike(mediaID, callback) {
+		function remove(mediaID, callback) {
 			//TODO - remove with curl
 			Instagram.utils.buildURL("media/" + mediaID + "/likes");
 //			curl -X DELETE https://api.instagram.com/v1/media/{media-id}/likes?access_token=26137025
 		}
 
 		return{
-			getLikes:getLikes,
-			postLike:postLike,
-			removeLike:removeLike
+			get:getLikes,
+			post:post,
+			remove:remove
 		};
 	})();
 
@@ -316,18 +314,67 @@ var Instagram = function (clientID, redirectURI) {
  * 		static members
  *
  */
+
 Instagram.accessToken = {};
 Instagram.baseURL = "https://api.instagram.com/v1/";
+Instagram.GET = "get";
+Instagram.POST = "post";
+Instagram.DELETE = "delete";
+
+
+/*
+ *
+ * 		utilities
+ *
+ */
 
 Instagram.utils = {};
 
-Instagram.utils.getJSONP = function (url, callback) {
+Instagram.utils.getJSON = function (url, callback) {
 	console.log("getJSON", url);
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function (event) {
+
+		if (event.target.readyState == 4) {
+			callback(JSON.parse(event.target.response));
+		}
+
+	};
+
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+};
+
+//Instagram.utils.rest = function(method, path, params) {
+//	var form = document.createElement("form");
+//	form.setAttribute("method", method);
+//	form.setAttribute("action", path + "&redirectURI=" + window.location.href);
+//
+//	for(var key in params) {
+//		if(params.hasOwnProperty(key)) {
+//			var hiddenField = document.createElement("input");
+//			hiddenField.setAttribute("type", "hidden");
+//			hiddenField.setAttribute("name", key);
+//			hiddenField.setAttribute("value", params[key]);
+//
+//			form.appendChild(hiddenField);
+//		}
+//	}
+//
+//	document.body.appendChild(form);
+//	form.submit();
+//	document.body.removeChild(form);
+//};
+
+
+Instagram.utils.getJSONP = function (url, callback) {
+	console.log("getJSONP", url);
 
 	var script = document.createElement("script");
 	script.type = "text/javascript";
 
-	window.__loaded = function(response) {
+	window.__loaded = function (response) {
 		callback(response);
 	};
 

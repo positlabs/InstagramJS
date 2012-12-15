@@ -12,6 +12,7 @@
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
+      if(instagram.error);//handle error
     };
 
   </script>
