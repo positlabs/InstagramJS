@@ -15,6 +15,7 @@ BEFORE YOU START
 
 To get your client ID / secret, go to the manage clients page on instagram.com (http://instagram.com/developer/clients/manage/)
 
+[link to blog post]
 
 INSTRUCTIONS
 ------------------------------------------------------------------------------------------------------------------------
@@ -28,8 +29,15 @@ Login flow:
 - when a new Instagram object is instantiated, it will look for the code query parameter. If it exists, it will get the access token from getAccessToken.php
 - Now you can make calls the the Instagram API!
 
+If the user is already logged in when they press the login button, it will just ask for permissions. If they have already given permission to the app, it will go ahead and get the access token.
+
 About the Instagram.parameters class:
 This object was created to simplify passing parameters to certain API calls.
+
+
+REVISION LOG
+------------------------------------------------------------------------------------------------------------------------
+- now using JSONP for GET requests. Still a work-in-progress.
 
 
 LEGAL

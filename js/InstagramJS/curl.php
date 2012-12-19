@@ -9,6 +9,7 @@ PhpConsole::start(true, true, dirname(__FILE__));
 $url = $_GET["url"];
 $ch = curl_init();
 
+//TODO - append method to the end of the url as a parameter, maybe get rid of CUSTOMREQUEST option if it works without it
 if($_GET["_method"] == "delete"){
   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 }
@@ -27,6 +28,7 @@ $rawOutput = curl_exec($ch);
 curl_close($ch);
 
 $output = $rawOutput;
+debug($output);
 
 echo $output;
 ?>

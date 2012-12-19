@@ -14,7 +14,7 @@
 var Instagram = (function (clientID, redirectURI) {
 	var loc = window.location.href;
 	var getAccessTokenURL = "./js/InstagramJS/getAccessToken.php";
-	var curlScript = "./js/InstagramJS/curl.php";
+	var curlScript = "./js/InstagramJS/curl.php?";
 
 	var authCode = loc.split("code=")[1];
 
@@ -42,22 +42,23 @@ var Instagram = (function (clientID, redirectURI) {
 		}
 
 		/*
-		 @param scope is an array that takes Instagram.SCOPE_BASIC, Instagram.SCOPE_COMMENTS, Instagram.SCOPE_RELATIONSHIPS, Instagram.SCOPE_LIKES
+		 @args takes Instagram.SCOPE_BASIC, Instagram.SCOPE_COMMENTS, Instagram.SCOPE_RELATIONSHIPS, Instagram.SCOPE_LIKES
 		 */
-		function login(scope, callback) {
+		function login() {
 			console.log(arguments.callee.name + "()", arguments);
 
-			scope = scope || [];
+			var scope = arguments || Instagram.SCOPE_BASIC;
 			var scopeArgs = "";
-			if (scope.length > 0)scopeArgs += "&scope=";
+			scopeArgs += "&scope=";
+
 			for (var item in scope) {
 				scopeArgs += scope[item] + "+";
 			}
+
 			scopeArgs = scopeArgs.substr(0, scopeArgs.length - 1);
 
 			// request permission
 			window.open(authURL + scopeArgs, "_self");
-			if (callback) callback(false);
 
 		}
 
@@ -82,28 +83,28 @@ var Instagram = (function (clientID, redirectURI) {
 		var user = (function () {
 
 			function userID(id, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id);
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/" + id);
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function feed(callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/self/feed");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/self/feed");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function recent(id, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/media/recent");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/" + id + "/media/recent");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function search(name, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/search") + "&q=" + name;
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/search") + "&q=" + name;
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function liked(callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/self/media/liked");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/self/media/liked");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			return{
@@ -125,27 +126,27 @@ var Instagram = (function (clientID, redirectURI) {
 			var DENY_ACTION = "deny";
 
 			function follows(id, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/follows");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/" + id + "/follows");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function followedBy(id, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/followed-by");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/" + id + "/followed-by");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function requestedBy(callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/requested-by");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/requested-by");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function getRelationship(id, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/relationship");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("users/" + id + "/relationship");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function postRelationship(id, action, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/relationship") + "action=" + action;
+				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/relationship", Instagram.POST) + "action=" + action;
 				Instagram.utils.ajax(url, callback, Instagram.POST);
 			}
 
@@ -168,18 +169,18 @@ var Instagram = (function (clientID, redirectURI) {
 		var media = (function () {
 
 			function info(mediaID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID);
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("media/" + mediaID);
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function search(params, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + search) + params.toString();
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("media/" + search) + params.toString();
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function popular(callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/popular");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("media/popular");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			return{
@@ -193,17 +194,17 @@ var Instagram = (function (clientID, redirectURI) {
 		var comments = (function () {
 
 			function getComments(mediaID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("media/" + mediaID + "/comments");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function postComment(mediaID, comment, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments") + "&text=" + comment;
+				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments", Instagram.POST) + "&text=" + comment;
 				Instagram.utils.ajax(url, callback, Instagram.POST);
 			}
 
 			function removeComment(mediaID, commentID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments/" + commentID);
+				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments/" + commentID, Instagram.DELETE);
 				Instagram.utils.ajax(url, callback, Instagram.POST);
 			}
 
@@ -218,8 +219,8 @@ var Instagram = (function (clientID, redirectURI) {
 		var likes = (function () {
 
 			function getLikes(mediaID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/likes");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("media/" + mediaID + "/likes");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function postLike(mediaID, callback) {
@@ -228,7 +229,7 @@ var Instagram = (function (clientID, redirectURI) {
 			}
 
 			function remove(mediaID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/likes", Instagram.POST);
+				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/likes", Instagram.DELETE);
 				Instagram.utils.ajax(url, callback, Instagram.POST);
 			}
 
@@ -243,8 +244,8 @@ var Instagram = (function (clientID, redirectURI) {
 		var tag = (function () {
 
 			function info(tag, callback) {
-				var url = curlScript + Instagram.utils.buildURL("tags/" + tag);
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("tags/" + tag);
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			/*
@@ -252,13 +253,13 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 	Takes min_id and max_id
 			 */
 			function recent(tag, params, callback) {
-				var url = curlScript + Instagram.utils.buildURL("tags/" + tag + "/media/recent") + params.toString();
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("tags/" + tag + "/media/recent") + params.toString();
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function search(tag, callback) {
-				var url = curlScript + Instagram.utils.buildURL("tags/" + tag) + "q=" + tag;
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("tags/" + tag) + "q=" + tag;
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			return{
@@ -273,8 +274,8 @@ var Instagram = (function (clientID, redirectURI) {
 		var location = (function () {
 
 			function info(locationID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("location/" + locationID);
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("location/" + locationID);
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			/*
@@ -282,8 +283,8 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 		takes min_id, max_id, min_timestamp, max_timestamp
 			 */
 			function recent(locationID, params, callback) {
-				var url = curlScript + Instagram.utils.buildURL("location/" + locationID + "/media/recent") + params.toString();
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("location/" + locationID + "/media/recent", Instagram.GET) + params.toString();
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			/*
@@ -291,8 +292,8 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 	takes lat, lng, distance, foursquare_v2_id, foursquare_id
 			 */
 			function search(params, callback) {
-				var url = curlScript + Instagram.utils.buildURL("location/search") + params.toString();
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("location/search") + params.toString();
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			return{
@@ -307,8 +308,8 @@ var Instagram = (function (clientID, redirectURI) {
 		var geography = (function () {
 
 			function recent(geoID, callback) {
-				var url = curlScript + Instagram.utils.buildURL("geographies/" + geoID + "/media/recent");
-				Instagram.utils.ajax(url, callback, Instagram.GET);
+				var url = Instagram.utils.buildURL("geographies/" + geoID + "/media/recent");
+				Instagram.utils.getJSONP(url, callback);
 			}
 
 			return{recent:recent};
@@ -359,6 +360,7 @@ Instagram.SCOPE_BASIC = "basic";
 Instagram.SCOPE_COMMENTS = "comments";
 Instagram.SCOPE_RELATIONSHIPS = "relationships";
 Instagram.SCOPE_LIKES = "likes";
+Instagram.SCOPE_ALL = "basic+comments+relationships+likes";
 
 
 /*
@@ -387,29 +389,31 @@ Instagram.utils.ajax = function (url, callback, method) {
 	xmlhttp.send();
 };
 
-//var __loadCount = 0;
-//Instagram.utils.getJSONP = function (url, callback) {
-//	console.log("getJSONP", url);
-//
-//	var script = document.createElement("script");
+var __loadCount = 0;
+Instagram.utils.getJSONP = function (url, callback) {
+
+	var script = document.createElement("script");
 //	script.type = "application/json";
-//
-//	if(callback) script.src = url + "&callback=__loaded" + __loadCount;
-//	else script.src = url;
-//
-//	document.body.appendChild(script);
-//
-//	if (callback) {
-//		window["__loaded" + __loadCount] = function (response) {
-//			callback(response);
-//		};
-//		__loadCount++;
-//	}
-//
-//};
+
+	if(callback != undefined) url += "&callback=__loaded" + __loadCount;
+		script.src = url;
+
+	console.log("getJSONP", url);
+
+	document.body.appendChild(script);
+
+	if (callback != undefined) {
+		window["__loaded" + __loadCount] = function (response) {
+			callback(response);
+		};
+		__loadCount++;
+	}
+
+};
 
 Instagram.utils.buildURL = function (endpoint, method) {
-	return '?_method=' + method + '&url=' + Instagram.baseURL + endpoint + "?access_token=" + Instagram.accessToken;
+	if(method == undefined) return Instagram.baseURL + endpoint + "?access_token=" + Instagram.accessToken;
+	else return '_method=' + method + '&url=' + Instagram.baseURL + endpoint + "?access_token=" + Instagram.accessToken;
 };
 
 
