@@ -16,22 +16,30 @@
     };
 
 
+    function login() {
+      instagram.login([Instagram.SCOPE_LIKES, Instagram.SCOPE_BASIC, Instagram.SCOPE_COMMENTS, Instagram.SCOPE_RELATIONSHIPS]);
+    }
 
-  function test(){
+    function test() {
+      instagram.likes.post("346476053871850482_183663451", callback);
+    }
 
-    instagram.likes.post("346476053871850482_183663451", function(r){
-      console.log('r', r);
-    })
+    var melanie = {
+      id:183663451,
+      username: "minniecastevet"
+    };
 
-  }
+    function callbk(response) {
+      console.log(arguments.callee.name + "()", arguments);
+    }
 
 
   </script>
 </head>
 <body>
 
-<button onclick="instagram.login();">log in to Instagram</button>
-<button onclick="test();"></button>
+<button onclick="login();">log in to Instagram</button>
+<button onclick="test();">test</button>
 
 </body>
 </html>
