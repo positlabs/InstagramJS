@@ -1,10 +1,12 @@
 <?php
 
+
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 require_once ('PhpConsole.php');
 PhpConsole::start(true, true, dirname(__FILE__));
+
 
 $url = $_GET["url"];
 $ch = curl_init();

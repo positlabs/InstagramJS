@@ -2,26 +2,41 @@
 <html>
 <head>
   <script src="js/InstagramJS/InstagramJS.js"></script>
+  <script src="demo/demo.js"></script>
+  <link rel="stylesheet" href="demo/demo.css">
 
   <script type="text/javascript">
 
-    var clientID = "YOUR CLIENT ID";
-    var redirectURI = "YOUR REDIRECT URI";
+    //    var clientID = "YOUR CLIENT ID";
+    //    var redirectURI = "YOUR REDIRECT URI";
+    var clientID = "8408db3daed84a379cddfb148885a429";
+    var redirectURI = "http://localhost/research/InstagramJS/demo.html";
 
     var instagram;
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
-      if(instagram.error);//handle error
-    };
+      if (instagram.error) {
+        //handle error
+      }
+
+      if(instagram.loggedIn())
+        makeDemoButtons();
+
+    }
 
   </script>
 </head>
 <body>
 
-<button onclick="instagram.login();">
+<button onclick="instagram.login(Instagram.SCOPE_ALL);">
   log in to Instagram
 </button>
+<div id="output"></div>
+
+<div id="buttons">
+
+</div>
 
 </body>
 </html>

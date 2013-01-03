@@ -17,6 +17,7 @@ var Instagram = (function (clientID, redirectURI) {
 	var curlScript = "./js/InstagramJS/curl.php?";
 
 	var authCode = loc.split("code=")[1];
+	var debug = true;
 
 	function cInstagram(clientID, redirectURI) {
 		var currUser;
@@ -45,7 +46,7 @@ var Instagram = (function (clientID, redirectURI) {
 		 @args takes Instagram.SCOPE_BASIC, Instagram.SCOPE_COMMENTS, Instagram.SCOPE_RELATIONSHIPS, Instagram.SCOPE_LIKES
 		 */
 		function login() {
-			console.log(arguments.callee.name + "()", arguments);
+		    if(debug) console.log("\n" + arguments.callee.name + "()", arguments);
 
 			var scope = arguments || Instagram.SCOPE_BASIC;
 			var scopeArgs = "";
@@ -64,12 +65,12 @@ var Instagram = (function (clientID, redirectURI) {
 
 		/* call this after user logs in */
 		function getAccessToken(authCode, callback) {
-			console.log(arguments.callee.name + "()", arguments);
+			if(debug) console.log(arguments.callee.name + "()", arguments);
 
 			var _accessTokenRequestURL = getAccessTokenURL + "?code=" + authCode + "&clientID=" + clientID + "&redirectURI=" + redirectURI;
 
 			Instagram.utils.ajax(_accessTokenRequestURL, function (response) {
-				console.log('\n\nevent', response);
+				if(debug) console.log('\n\nevent', response);
 
 				currUser = response.user;
 
@@ -83,11 +84,14 @@ var Instagram = (function (clientID, redirectURI) {
 		var user = (function () {
 
 			function userID(id, callback) {
+				if(debug) console.log(arguments.callee.name + "()", arguments);
+
 				var url = Instagram.utils.buildURL("users/" + id);
 				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function feed(callback) {
+				if(debug) console.log(arguments.callee.name + "()", arguments);
 				var url = Instagram.utils.buildURL("users/self/feed");
 				Instagram.utils.getJSONP(url, callback);
 			}
@@ -136,7 +140,7 @@ var Instagram = (function (clientID, redirectURI) {
 			}
 
 			function requestedBy(callback) {
-				var url = Instagram.utils.buildURL("users/requested-by");
+				var url = Instagram.utils.buildURL("users/self/requested-by");
 				Instagram.utils.getJSONP(url, callback);
 			}
 
@@ -146,7 +150,7 @@ var Instagram = (function (clientID, redirectURI) {
 			}
 
 			function postRelationship(id, action, callback) {
-				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/relationship", Instagram.POST) + "action=" + action;
+				var url = curlScript + Instagram.utils.buildURL("users/" + id + "/relationship", Instagram.POST) + "&action=" + action;
 				Instagram.utils.ajax(url, callback, Instagram.POST);
 			}
 
@@ -198,6 +202,7 @@ var Instagram = (function (clientID, redirectURI) {
 				Instagram.utils.getJSONP(url, callback);
 			}
 
+			// for this to work, you must request permission from Instagram admins
 			function postComment(mediaID, comment, callback) {
 				var url = curlScript + Instagram.utils.buildURL("media/" + mediaID + "/comments", Instagram.POST) + "&text=" + comment;
 				Instagram.utils.ajax(url, callback, Instagram.POST);
@@ -319,6 +324,10 @@ var Instagram = (function (clientID, redirectURI) {
 			return currUser;
 		};
 
+		var loggedIn = function(){
+			return authCode != undefined || Instagram.accessToken.length > 3;
+		};
+
 
 		return{
 			baseURL:Instagram.baseURL,
@@ -328,6 +337,7 @@ var Instagram = (function (clientID, redirectURI) {
 			accessToken:Instagram.accessToken,
 			login:login,
 			currentUser:getUser,
+			loggedIn:loggedIn,
 			user:user,
 			relationship:relationship,
 			media:media,
