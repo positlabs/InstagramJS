@@ -53,8 +53,72 @@ function makeDemoButtons() {
 			'parameters':['id', 'action']
 		}
 	];
+	var media = [
+		{
+			'name':'media.info',
+			'function':instagram.media.info,
+			'parameters':['mediaID']
+		},{
+			'name':'media.search',
+			'function':instagram.media.search,
+			'parameters':['Insagram.Parameters']
+		},{
+			'name':'media.popular',
+			'function':instagram.media.popular,
+			'parameters':[]
+		}
+	];
+	var comments = [
+		{
+			'name':'comments.get',
+			'function':instagram.comments.get,
+			'parameters':['mediaID']
+		},{
+			'name':'comments.post',
+			'function':instagram.comments.get,
+			'parameters':['mediaID', 'comment']
+		},{
+			'name':'comments.remove',
+			'function':instagram.comments.get,
+			'parameters':['mediaID', 'commentID']
+		}
+	];
 
-	var apiCategories = [user, relationship];
+	var likes = [
+		{
+			'name':'likes.get',
+			'function':instagram.likes.get,
+			'parameters':['mediaID']
+		},{
+			'name':'likes.post',
+			'function':instagram.likes.post,
+			'parameters':['mediaID']
+		},{
+			'name':'likes.remove',
+			'function':instagram.likes.remove,
+			'parameters':['mediaID']
+		}
+	];
+
+	var tags = [
+		{
+			'name':'tags.info',
+			'function':instagram.tags.info,
+			'parameters':['tag']
+		},{
+			'name':'tags.recent',
+			'function':instagram.tags.recent,
+			'parameters':['tag', 'Instagram.Parameters (min_id, max_id)']
+		},{
+			'name':'tags.search',
+			'function':instagram.tags.search,
+			'parameters':['tag']
+		}
+	];
+
+	var location = [];
+
+	var apiCategories = [user, relationship, media, comments, likes, tags];
 	var buttonBox = document.getElementById("buttons");
 
 	// loop through all categories
@@ -116,6 +180,10 @@ function makeDemoButtons() {
 
 function callback(response) {
 	console.log(arguments.callee.name + "()", response);
+
+	var o = document.getElementById('output');
+	o.outerHTML = "response:\n\n" + JSON.stringify(response) + o.innerHTML;
+
 
 	//TODO - show in output window
 }
