@@ -9,13 +9,13 @@ josh@positlabs.com
 http://pixel-fiend.positlabs.com/
 
 
-
 BEFORE YOU START
 ------------------------------------------------------------------------------------------------------------------------
 
 To get your client ID / secret, go to the manage clients page on instagram.com (http://instagram.com/developer/clients/manage/)
 
-[link to blog post]
+http://pixel-fiend.positlabs.com/2012/12/instagramjs.html
+
 
 INSTRUCTIONS
 ------------------------------------------------------------------------------------------------------------------------
@@ -32,12 +32,7 @@ Login flow:
 If the user is already logged in when they press the login button, it will just ask for permissions. If they have already given permission to the app, it will go ahead and get the access token.
 
 About the Instagram.parameters class:
-This object was created to simplify passing parameters to certain API calls.
-
-
-REVISION LOG
-------------------------------------------------------------------------------------------------------------------------
-- now using JSONP for GET requests. Still a work-in-progress.
+This object was created to simplify passing parameters to certain API calls. Includes a parameterize() method that outputs the object members as a string of query parameters
 
 
 LEGAL

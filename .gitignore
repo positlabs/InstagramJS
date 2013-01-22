@@ -1,3 +1,4 @@
 deploy/
+PhpConsole/
 .idea/
 *.pyc

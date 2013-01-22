@@ -164,8 +164,17 @@ function makeDemoButtons() {
 				var args = [];
 				var fields = e.target.data;
 				for (var i = 0; i < fields.length; i++) {
-					args.push(fields[i].value);
+					//TODO - find a way to input Parameters objects... maybe with eval()
+
+					var val = fields[i].value;
+					if(val.match("{") != undefined){
+						console.log('val', JSON.parse(val));
+
+						args.push(JSON.parse(val));
+					}else
+						args.push(val);
 				}
+
 				args.push(callback);
 
 				e.target["data-f"].apply(null, args);
@@ -182,8 +191,6 @@ function callback(response) {
 	console.log(arguments.callee.name + "()", response);
 
 	var o = document.getElementById('output');
-	o.outerHTML = "response:\n\n" + JSON.stringify(response) + o.innerHTML;
+	o.outerHTML = "<div id='output'>response:\n\n" + JSON.stringify(response) + o.innerHTML + "</div>";
 
-
-	//TODO - show in output window
 }

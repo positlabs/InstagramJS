@@ -5,25 +5,20 @@
 
   <script type="text/javascript">
 
-    var clientID = "8408db3daed84a379cddfb148885a429";
-    var redirectURI = "http://localhost/research/InstagramJS/";
+    var clientID = "YOUR CLIENT ID";
+    var redirectURI = "YOUR REDIRECT URI";
 
     var instagram;
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
-
     };
-
 
     function login() {
       instagram.login(Instagram.SCOPE_ALL);
     }
 
-    function test() {
-      instagram.likes.post("346476053871850482_183663451", callback);
-    }
-
+    //// SOME STUFF FOR TESTING IN THE CONSOLE INPUT
     var me = {
       bio: "",
       full_name: "Joshua J Beckwith",
@@ -43,7 +38,6 @@
 <body>
 
 <button onclick="login();">log in to Instagram</button>
-<button onclick="test();">test</button>
 
 </body>
 </html>

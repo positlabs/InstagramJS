@@ -178,7 +178,7 @@ var Instagram = (function (clientID, redirectURI) {
 			}
 
 			function search(params, callback) {
-				var url = Instagram.utils.buildURL("media/" + search) + params.toString();
+				var url = Instagram.utils.buildURL("media/" + search) + (params.parameterize());
 				Instagram.utils.getJSONP(url, callback);
 			}
 
@@ -258,12 +258,12 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 	Takes min_id and max_id
 			 */
 			function recent(tag, params, callback) {
-				var url = Instagram.utils.buildURL("tags/" + tag + "/media/recent") + params.toString();
+				var url = Instagram.utils.buildURL("tags/" + tag + "/media/recent") + params.parameterize();
 				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function search(tag, callback) {
-				var url = Instagram.utils.buildURL("tags/" + tag) + "q=" + tag;
+				var url = Instagram.utils.buildURL("tags/" + tag) + "&q=" + tag;
 				Instagram.utils.getJSONP(url, callback);
 			}
 
@@ -288,7 +288,7 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 		takes min_id, max_id, min_timestamp, max_timestamp
 			 */
 			function recent(locationID, params, callback) {
-				var url = Instagram.utils.buildURL("location/" + locationID + "/media/recent", Instagram.GET) + params.toString();
+				var url = Instagram.utils.buildURL("location/" + locationID + "/media/recent", Instagram.GET) + params.parameterize();
 				Instagram.utils.getJSONP(url, callback);
 			}
 
@@ -297,7 +297,7 @@ var Instagram = (function (clientID, redirectURI) {
 			 * 	takes lat, lng, distance, foursquare_v2_id, foursquare_id
 			 */
 			function search(params, callback) {
-				var url = Instagram.utils.buildURL("location/search") + params.toString();
+				var url = Instagram.utils.buildURL("location/search") + params.parameterize();
 				Instagram.utils.getJSONP(url, callback);
 			}
 
@@ -448,7 +448,7 @@ Instagram.Parameters = function () {
 	this.foursquare_v2_id = undefined;
 
 	/* @return a string of query parameters */
-	this.toString = function () {
+	this.parameterize = function () {
 		var string = "";
 		var params = this;
 
