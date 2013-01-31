@@ -13,7 +13,7 @@
 
   $access_token_parameters = array(
     'client_id'		=>          $_GET["clientID"],
-    'client_secret'		=>      'PUT YOUR CLIENT SECRET HERE',
+    'client_secret'		=>      '405b71c3fda94e57b31c3975aa5d1b38',
     'grant_type'		=>        'authorization_code',
     'redirect_uri'		=>      $_GET["redirectURI"],
     'code'			=>            $_GET["code"]
