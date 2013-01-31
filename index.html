@@ -5,20 +5,21 @@
 
   <script type="text/javascript">
 
-    var clientID = "YOUR CLIENT ID";
-    var redirectURI = "YOUR REDIRECT URI";
+    var clientID = "8408db3daed84a379cddfb148885a429";
+    var redirectURI = "http://localhost/research/InstagramJS/";
 
     var instagram;
 
     window.onload = function () {
       instagram = new Instagram(clientID, redirectURI);
+
     };
+
 
     function login() {
       instagram.login(Instagram.SCOPE_ALL);
     }
 
-    //// SOME STUFF FOR TESTING IN THE CONSOLE INPUT
     var me = {
       bio: "",
       full_name: "Joshua J Beckwith",

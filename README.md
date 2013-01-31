@@ -12,7 +12,7 @@ http://pixel-fiend.positlabs.com/
 BEFORE YOU START
 ------------------------------------------------------------------------------------------------------------------------
 
-To get your client ID / secret, go to the manage clients page on instagram.com (http://instagram.com/developer/clients/manage/)
+To get your client ID / secret, go to the manage clients page on instagram.com (http://instagram.com/developer/clients/manage/). Be sure to put your client secret into getAccessToken.php!
 
 http://pixel-fiend.positlabs.com/2012/12/instagramjs.html
 

@@ -7,10 +7,10 @@
 
   <script type="text/javascript">
 
-    //  THIS IS A DEMO, NOT A TUTORIAL.
-
-    var clientID = "YOUR CLIENT ID";
-    var redirectURI = "YOUR REDIRECT URI";
+    //    var clientID = "YOUR CLIENT ID";
+    //    var redirectURI = "YOUR REDIRECT URI";
+    var clientID = "8408db3daed84a379cddfb148885a429";
+    var redirectURI = "http://localhost/research/InstagramJS/demo.html";
 
     var instagram;
 
@@ -20,7 +20,7 @@
         //handle error
       }
 
-      if (instagram.loggedIn())
+      if(instagram.loggedIn())
         makeDemoButtons();
 
     }
