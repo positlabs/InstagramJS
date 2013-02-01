@@ -17,7 +17,9 @@ var Instagram = (function (clientID, redirectURI) {
 	var curlScript = "./js/InstagramJS/curl.php?";
 
 	var authCode = loc.split("code=")[1];
-	var debug = true;
+	this.debug = true;
+
+	var me = this;
 
 	function cInstagram(clientID, redirectURI) {
 		var currUser;
@@ -46,7 +48,7 @@ var Instagram = (function (clientID, redirectURI) {
 		 @args takes Instagram.SCOPE_BASIC, Instagram.SCOPE_COMMENTS, Instagram.SCOPE_RELATIONSHIPS, Instagram.SCOPE_LIKES
 		 */
 		function login() {
-		    if(debug) console.log("\n" + arguments.callee.name + "()", arguments);
+			if(debug) console.log("\n" + arguments.callee.name + "()", arguments);
 
 			var scope = arguments || Instagram.SCOPE_BASIC;
 			var scopeArgs = "";
@@ -65,12 +67,12 @@ var Instagram = (function (clientID, redirectURI) {
 
 		/* call this after user logs in */
 		function getAccessToken(authCode, callback) {
-			if(debug) console.log(arguments.callee.name + "()", arguments);
+			if(me.debug) console.log(arguments.callee.name + "()", arguments);
 
 			var _accessTokenRequestURL = getAccessTokenURL + "?code=" + authCode + "&clientID=" + clientID + "&redirectURI=" + redirectURI;
 
 			Instagram.utils.ajax(_accessTokenRequestURL, function (response) {
-				if(debug) console.log('\n\nevent', response);
+				if(me.debug) console.log('\n\nevent', response);
 
 				currUser = response.user;
 
@@ -84,14 +86,14 @@ var Instagram = (function (clientID, redirectURI) {
 		var user = (function () {
 
 			function userID(id, callback) {
-				if(debug) console.log(arguments.callee.name + "()", arguments);
+				if(me.debug) console.log(arguments.callee.name + "()", arguments);
 
 				var url = Instagram.utils.buildURL("users/" + id);
 				Instagram.utils.getJSONP(url, callback);
 			}
 
 			function feed(callback) {
-				if(debug) console.log(arguments.callee.name + "()", arguments);
+				if(me.debug) console.log(arguments.callee.name + "()", arguments);
 				var url = Instagram.utils.buildURL("users/self/feed");
 				Instagram.utils.getJSONP(url, callback);
 			}
@@ -382,7 +384,7 @@ Instagram.SCOPE_ALL = "basic+comments+relationships+likes";
 Instagram.utils = {};
 
 Instagram.utils.ajax = function (url, callback, method) {
-	console.log("ajax", url);
+	if(Instagram.debug) console.log("ajax", url);
 
 	method = method || Instagram.GET;
 
@@ -406,9 +408,9 @@ Instagram.utils.getJSONP = function (url, callback) {
 //	script.type = "application/json";
 
 	if(callback != undefined) url += "&callback=__loaded" + __loadCount;
-		script.src = url;
+	script.src = url;
 
-	console.log("getJSONP", url);
+	if(Instagram.debug) console.log("getJSONP", url);
 
 	document.body.appendChild(script);
 
@@ -462,5 +464,7 @@ Instagram.Parameters = function () {
 	};
 
 };
+
+
 
 
