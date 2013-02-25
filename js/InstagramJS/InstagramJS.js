@@ -20,7 +20,6 @@ var Instagram = (function (clientID, redirectURI) {
 	this.debug = true;
 
 	var me = this;
-	this.onlogin = function(){};
 
 
 	function cInstagram(clientID, redirectURI) {
@@ -30,7 +29,7 @@ var Instagram = (function (clientID, redirectURI) {
 		// logged in already?, get access token
 		if (authCode) {
 
-			getAccessToken(authCode, me.onlogin);
+			getAccessToken(authCode, Instagram.onlogin);
 
 			//check for errors / denial
 			var error = loc.split("error=")[1];
@@ -429,6 +428,9 @@ Instagram.utils.buildURL = function (endpoint, method) {
 	if(method == undefined) return Instagram.baseURL + endpoint + "?access_token=" + Instagram.accessToken;
 	else return '_method=' + method + '&url=' + Instagram.baseURL + endpoint + "?access_token=" + Instagram.accessToken;
 };
+
+// callback for login success
+Instagram.onlogin = function(){};
 
 
 /*
