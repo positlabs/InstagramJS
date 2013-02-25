@@ -20,6 +20,8 @@ var Instagram = (function (clientID, redirectURI) {
 	this.debug = true;
 
 	var me = this;
+	this.onlogin = function(){};
+
 
 	function cInstagram(clientID, redirectURI) {
 		var currUser;
@@ -28,7 +30,7 @@ var Instagram = (function (clientID, redirectURI) {
 		// logged in already?, get access token
 		if (authCode) {
 
-			getAccessToken(authCode);
+			getAccessToken(authCode, me.onlogin);
 
 			//check for errors / denial
 			var error = loc.split("error=")[1];
