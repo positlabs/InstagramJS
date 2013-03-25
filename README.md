@@ -20,8 +20,15 @@ http://pixel-fiend.positlabs.com/2012/12/instagramjs.html
 INSTRUCTIONS
 ------------------------------------------------------------------------------------------------------------------------
 
-Make a new instagram object and pass it the clientID and redirectURL
-
+Make a new instagram object and pass it an Instagram.Config object
+```javascript
+var config = new Instagram.Config();
+config.scope = [Instagram.SCOPE_BASIC, Instagram.SCOPE_LIKES];
+config.debug = true;
+config.clientID = "YOUR CLIENT ID";
+config.redirectURI = "YOUR REDIRECT URI";
+var instagram = new Instagram(config);
+```
 Login flow:
 - call instagram.login()
 - user will be prompted with login fields

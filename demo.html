@@ -7,13 +7,18 @@
 
   <script type="text/javascript">
 
-    var clientID = "YOUR CLIENT ID";
-    var redirectURI = "YOUR REDIRECT URI";
-
-    var instagram;
+    var instagram,
+        config;
 
     window.onload = function () {
-      instagram = new Instagram(clientID, redirectURI);
+
+      config = new Instagram.Config();
+      config.clientID = "YOUR CLIENT ID";
+      config.redirectURI = "YOUR REDIRECT URI";
+      config.scope = [Instagram.SCOPE_ALL];
+      config.debug = true;
+
+      instagram = new Instagram(config);
       if (instagram.error) {
         //handle error
       }

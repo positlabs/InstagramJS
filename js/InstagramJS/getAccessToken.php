@@ -13,7 +13,7 @@
 
   $access_token_parameters = array(
     'client_id'		=>          $_GET["clientID"],
-    'client_secret'		=>      'ACCESS TOKEN GOES HERE',
+    'client_secret'		=>      'SECRET GOES HERE',
     'grant_type'		=>        'authorization_code',
     'redirect_uri'		=>      $_GET["redirectURI"],
     'code'			=>            $_GET["code"]

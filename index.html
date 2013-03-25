@@ -5,28 +5,34 @@
 
   <script type="text/javascript">
 
-    var clientID = "CLIENT ID GOES HERE";
-    var redirectURI = "REDIRECT URI GOES HERE";
-
-    var instagram;
+    var instagram,
+      config;
 
     window.onload = function () {
-      instagram = new Instagram(clientID, redirectURI);
+
+      config = new Instagram.Config();
+      config.clientID = "YOUR CLIENT ID";
+      config.redirectURI = "YOUR REDIRECT URI";
+      config.scope = [Instagram.SCOPE_ALL];
+      config.debug = true;
+
+      instagram = new Instagram(config);
 
     };
 
 
     function login() {
-      instagram.login(Instagram.SCOPE_ALL);
+      instagram.login();
     }
 
+    // just for testing convenience
     var me = {
-      bio: "",
-      full_name: "Joshua J Beckwith",
-      id: "261370252",
-      profile_picture: "http://images.instagram.com/profiles/profile_261370252_75sq_1354300093.jpg",
-      username: "positlabs",
-      website: "http://positlabs.com"
+      bio:"",
+      full_name:"Joshua J Beckwith",
+      id:"261370252",
+      profile_picture:"http://images.instagram.com/profiles/profile_261370252_75sq_1354300093.jpg",
+      username:"positlabs",
+      website:"http://positlabs.com"
     };
 
     function callbk(response) {
